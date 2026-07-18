@@ -1,0 +1,51 @@
+name: "Append-only check (roots/)"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  append-only-check:
+    name: "Verify roots/ was only appended to, never modified or deleted"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository (full history)"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "Diff roots/ between the previous and current commit"
+        run: |
+          set -euo pipefail
+
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.event.after }}"
+
+          # First push to a new branch/repo: before is the all-zero SHA.
+          if [[ "${BEFORE}" =~ ^0+$ ]]; then
+            echo "Initial push -- nothing to compare against, passing."
+            exit 0
+          fi
+
+          echo "Comparing ${BEFORE}..${AFTER} for changes under roots/"
+          changes="$(git diff --name-status "${BEFORE}" "${AFTER}" -- roots/ || true)"
+          echo "${changes}"
+
+          if [[ -z "${changes}" ]]; then
+            echo "No changes under roots/ in this push -- passing."
+            exit 0
+          fi
+
+          # git diff --name-status prefixes: A=added, M=modified, D=deleted,
+          # R=renamed (also disallowed -- a rename can mask a content change
+          # under a new name while the old published file vanishes).
+          violations="$(echo "${changes}" | grep -vE '^A' || true)"
+          if [[ -n "${violations}" ]]; then
+            echo "::error::Non-append changes detected under roots/ (only new files may be added, never modified/deleted/renamed):"
+            echo "${violations}"
+            exit 1
+          fi
+
+          echo "All changes under roots/ are pure additions -- passing."
