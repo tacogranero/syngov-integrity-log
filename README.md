@@ -28,13 +28,13 @@ steps.
 
 ## What this is NOT
 
-- Not a claim of absolute, unconditional immutability. It is a
-  **published integrity root, archived externally** — the specific,
-  falsifiable guarantees are: (a) an independent time-stamping
-  authority attests the root existed at a given instant, and (b)
-  Software Heritage's own archive holds a copy of this repository's
-  state at that time. Both of those are independently checkable by a
-  third party; neither claim is stronger than that.
+- This is a **published integrity root, archived externally** — not a
+  broader claim. The specific, falsifiable properties are: (a) an
+  independent time-stamping authority attests the root existed at a
+  given instant, and (b) Software Heritage's own archive holds a copy
+  of this repository's state at that time. Both of those are
+  independently checkable by a third party; neither claim is stronger
+  than that.
 - Not a place to look up what an artifact's contents say. Only hashes
   are published here — never report content, client names, or any
   other evidence.

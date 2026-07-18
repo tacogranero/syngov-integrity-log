@@ -127,8 +127,8 @@ SynGov involvement in any of the 4 checks above.
   the job of the Ed25519 signature chain and (for T3-T4, once live)
   the qualified co-signature, both verified separately at
   `/verify/sig/:hash`.
-- It does not make the underlying data legally "immutable" in an
-  absolute sense — it gives you two independent, externally-checkable
+- It is a published integrity root, archived externally — not a
+  broader claim. It gives you two independent, externally-checkable
   attestations (a timestamp and an archive copy) that did not depend
   on SynGov's own infrastructure being available or trustworthy at the
   moment you check.
